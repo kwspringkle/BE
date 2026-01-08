@@ -47,6 +47,8 @@ public class DishRestaurantService implements IDishRestaurant {
                 .id(dr.getId())
                 .dishesname(dr.getDish().getName())
                 .restaurantname(dr.getRestaurant().getName())
+            .restaurantId(dr.getRestaurant().getId())
+            .restaurantAddress(dr.getRestaurant().getAddress())
                 .imageUrl(dr.getDish().getImageUrl())
                 .distance(dr.getRestaurant().getDistance())
                 .build());

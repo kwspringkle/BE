@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface IDishReviewServer {
     boolean addDishReview(int userId, AddDishReview addDishReview);
-    boolean updateDishReview(UpdateDishReview updateDishReview);
-    boolean deleteDishReview(int dishReviewId);
+    boolean updateDishReview(int userId, UpdateDishReview updateDishReview);
+    boolean deleteDishReview(int userId, int dishReviewId);
     List<DishReviewByDish> getDishReviewByDish(int dishId);
 }

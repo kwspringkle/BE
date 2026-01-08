@@ -60,20 +60,27 @@ public class RestaurantReviewService implements IRestaurantReview {
     }
 
     @Override
-    public boolean updateRestaurantReview(UpdateRestaurantReview updateRestaurantReview) {
+    public boolean updateRestaurantReview(int userId, UpdateRestaurantReview updateRestaurantReview) {
         RestaurantReview restaurantReview = restaurantReviewRepository.findById(updateRestaurantReview.id).orElse(null);
         if (restaurantReview == null) {
             return false;
         }
+        if (restaurantReview.getUser() == null || restaurantReview.getUser().getId() != userId) {
+            return false;
+        }
         restaurantReview.setComment(updateRestaurantReview.comment);
+        restaurantReview.setRating(updateRestaurantReview.rating);
         restaurantReviewRepository.save(restaurantReview);
         return true;
     }
 
     @Override
-    public boolean deleteRestaurantReview(int restaurantReviewId) {
+    public boolean deleteRestaurantReview(int userId, int restaurantReviewId) {
         RestaurantReview restaurantReview = restaurantReviewRepository.findById(restaurantReviewId).orElse(null);
         if (restaurantReview == null) {
+            return false;
+        }
+        if (restaurantReview.getUser() == null || restaurantReview.getUser().getId() != userId) {
             return false;
         }
         restaurantReviewRepository.delete(restaurantReview);
@@ -92,6 +99,7 @@ public class RestaurantReviewService implements IRestaurantReview {
             Restaurant restaurant = restaurantReview.getRestaurant();
             RestaurantReviewByRestaurant restaurantReviewByRestaurant = RestaurantReviewByRestaurant.builder()
                     .restaurantReviewId(restaurantReview.getId())
+                    .userId(users.getId())
                     .fullName(users.getName())
                     .national(users.getNational())
                     .restaurantName(restaurant.getName())

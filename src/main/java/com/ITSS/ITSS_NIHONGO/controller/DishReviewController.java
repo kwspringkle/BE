@@ -44,10 +44,19 @@ public class DishReviewController {
     }
 
     @PutMapping("/dishReview")
-    public ResponseEntity<Map<String,Object>> updateDishReview(@RequestBody UpdateDishReview updateDishReview){
+    public ResponseEntity<Map<String,Object>> updateDishReview(HttpServletRequest request,
+                                                              @RequestBody UpdateDishReview updateDishReview){
         Map<String,Object> map = new HashMap<>();
         try {
-            boolean updateComment = dishReviewService.updateDishReview(updateDishReview);
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                map.put("status", "error");
+                map.put("message", "Missing or invalid Authorization header");
+                return ResponseEntity.status(401).body(map);
+            }
+            int userId = jwtService.extractUserId(authHeader.substring(7));
+
+            boolean updateComment = dishReviewService.updateDishReview(userId, updateDishReview);
             if(updateComment){
                 map.put("status", "success");
                 map.put("message", "Review updated successfully");
@@ -85,10 +94,19 @@ public class DishReviewController {
     }
 
     @DeleteMapping("/dishReview")
-    public ResponseEntity<Map<String,Object>> deleteDishReview(@RequestParam int dishReviewId) {
+    public ResponseEntity<Map<String,Object>> deleteDishReview(HttpServletRequest request,
+                                                              @RequestParam int dishReviewId) {
         Map<String, Object> map = new HashMap<>();
         try {
-            boolean deleteComment = dishReviewService.deleteDishReview(dishReviewId);
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                map.put("status", "error");
+                map.put("message", "Missing or invalid Authorization header");
+                return ResponseEntity.status(401).body(map);
+            }
+            int userId = jwtService.extractUserId(authHeader.substring(7));
+
+            boolean deleteComment = dishReviewService.deleteDishReview(userId, dishReviewId);
             if (deleteComment) {
                 map.put("status", "success");
                 map.put("message", "Review deleted successfully");

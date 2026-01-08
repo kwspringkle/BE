@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 @Builder
 public class DishReviewByDish {
     public int dishReviewId;
+    public int userId;
     public String fullName;
     public String national;
     public String dishesName;

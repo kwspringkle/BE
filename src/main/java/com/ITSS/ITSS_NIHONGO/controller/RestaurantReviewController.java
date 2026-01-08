@@ -55,10 +55,19 @@ public class RestaurantReviewController {
     }
 
     @PutMapping("/restaurantReview")
-    public ResponseEntity<Map<String,Object>> updateRestaurantReview(@RequestBody UpdateRestaurantReview updateRestaurantReview){
+    public ResponseEntity<Map<String,Object>> updateRestaurantReview(HttpServletRequest request,
+                                                                    @RequestBody UpdateRestaurantReview updateRestaurantReview){
         Map<String,Object> map = new HashMap<>();
         try {
-            boolean updateComment = restaurantReviewService.updateRestaurantReview(updateRestaurantReview);
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                map.put("status", "error");
+                map.put("message", "Missing or invalid Authorization header");
+                return ResponseEntity.status(401).body(map);
+            }
+
+            int userId = jwtService.extractUserId(authHeader.substring(7));
+            boolean updateComment = restaurantReviewService.updateRestaurantReview(userId, updateRestaurantReview);
             if(updateComment){
                 map.put("status", "success");
                 map.put("message", "Review updated successfully");
@@ -96,10 +105,19 @@ public class RestaurantReviewController {
     }
 
     @DeleteMapping("/restaurantReview")
-    public ResponseEntity<Map<String,Object>> deleteRestaurantReview(@RequestParam int restaurantReviewId) {
+    public ResponseEntity<Map<String,Object>> deleteRestaurantReview(HttpServletRequest request,
+                                                                    @RequestParam int restaurantReviewId) {
         Map<String, Object> map = new HashMap<>();
         try {
-            boolean deleteComment = restaurantReviewService.deleteRestaurantReview(restaurantReviewId);
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                map.put("status", "error");
+                map.put("message", "Missing or invalid Authorization header");
+                return ResponseEntity.status(401).body(map);
+            }
+
+            int userId = jwtService.extractUserId(authHeader.substring(7));
+            boolean deleteComment = restaurantReviewService.deleteRestaurantReview(userId, restaurantReviewId);
             if (deleteComment) {
                 map.put("status", "success");
                 map.put("message", "Review deleted successfully");

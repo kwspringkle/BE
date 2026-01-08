@@ -51,20 +51,27 @@ public class DishReviewService implements IDishReviewServer {
     }
 
     @Override
-    public boolean updateDishReview(UpdateDishReview updateDishReview) {
+    public boolean updateDishReview(int userId, UpdateDishReview updateDishReview) {
         DishReview dishReview = dishReviewRepository.findById(updateDishReview.id).orElse(null);
         if (dishReview == null) {
             return false;
         }
+        if (dishReview.getUser() == null || dishReview.getUser().getId() != userId) {
+            return false;
+        }
         dishReview.setComment(updateDishReview.comment);
+        dishReview.setRate(updateDishReview.rating);
         dishReviewRepository.save(dishReview);
         return true;
     }
 
     @Override
-    public boolean deleteDishReview(int dishReviewId) {
+    public boolean deleteDishReview(int userId, int dishReviewId) {
         DishReview dishReview = dishReviewRepository.findById(dishReviewId).orElse(null);
         if (dishReview == null) {
+            return false;
+        }
+        if (dishReview.getUser() == null || dishReview.getUser().getId() != userId) {
             return false;
         }
         dishReviewRepository.delete(dishReview);
@@ -83,6 +90,7 @@ public class DishReviewService implements IDishReviewServer {
             Dishes dishes = dishReview.getDish();
             DishReviewByDish dishReviewByDish = DishReviewByDish.builder()
                     .dishReviewId(dishReview.getId())
+                    .userId(users.getId())
                     .fullName(users.getName())
                     .national(users.getNational())
                     .dishesName(dishes.getName())

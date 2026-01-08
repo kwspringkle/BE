@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IRestaurantReview {
     boolean addRestaurantReview(int userId, AddRestaurantReview addRestaurantReview);
-    boolean updateRestaurantReview(UpdateRestaurantReview updateRestaurantReview);
-    boolean deleteRestaurantReview(int restaurantReviewId);
+    boolean updateRestaurantReview(int userId, UpdateRestaurantReview updateRestaurantReview);
+    boolean deleteRestaurantReview(int userId, int restaurantReviewId);
     List<RestaurantReviewByRestaurant> getRestaurantReviewByRestaurant(int restaurantId);
 }

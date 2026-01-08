@@ -154,4 +154,26 @@ public class DishRestaurantController {
             return ResponseEntity.status(500).body(response);
         }
     }
+
+    @GetMapping("/search-categorized")
+    public ResponseEntity<Map<String, Object>> searchCategorized(@RequestParam String keyword) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            var searchResults = dishRestaurantService.searchCategorized(keyword);
+            if (searchResults.getRestaurants().isEmpty() && 
+                searchResults.getDishesByName().isEmpty() && 
+                searchResults.getDishesByIngredients().isEmpty()) {
+                response.put("status", "fail");
+                response.put("message", "No results found for keyword: " + keyword);
+                return ResponseEntity.status(404).body(response);
+            }
+            response.put("status", "success");
+            response.put("data", searchResults);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("message", "An error occurred while searching");
+            return ResponseEntity.status(500).body(response);
+        }
+    }
 }

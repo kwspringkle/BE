@@ -1,9 +1,6 @@
 package com.ITSS.ITSS_NIHONGO.Iservice;
 
-import com.ITSS.ITSS_NIHONGO.dto.response.DishRestaurant.DishRestaurantAll;
-import com.ITSS.ITSS_NIHONGO.dto.response.DishRestaurant.DishRestaurantDetail;
-import com.ITSS.ITSS_NIHONGO.dto.response.DishRestaurant.RestaurantByDish;
-import com.ITSS.ITSS_NIHONGO.dto.response.DishRestaurant.SearchResult;
+import com.ITSS.ITSS_NIHONGO.dto.response.DishRestaurant.*;
 import com.ITSS.ITSS_NIHONGO.dto.response.Dishes.DishResponse;
 import org.springframework.data.domain.Page;
 
@@ -16,4 +13,5 @@ public interface IDishRestaurant {
     DishRestaurantDetail getDishRestaurantDetail(int dishId, int restaurantId);
     List<RestaurantByDish> getRestaurantByDish(int dishId, int dishRestaurantId);
     Page<SearchResult> searchDishOrRestaurant(String keyword, int page, int size);
+    CategorizedSearchResponse searchCategorized(String keyword);
 }

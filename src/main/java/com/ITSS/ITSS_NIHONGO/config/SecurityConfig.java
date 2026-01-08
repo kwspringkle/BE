@@ -33,8 +33,15 @@ public class SecurityConfig {
                     .httpBasic(AbstractHttpConfigurer::disable)
                     .csrf(AbstractHttpConfigurer::disable)
                     .authorizeHttpRequests(auth -> auth
-                            .requestMatchers("/auth/**").permitAll() // Cho phép truy cập không cần auth
-                            .anyRequest().authenticated() // Các request khác cần auth
+                            .requestMatchers("/auth/**").permitAll() // Authentication endpoints
+                            .requestMatchers("/search", "/search-categorized").permitAll() // Search endpoints
+                            .requestMatchers("/disharmonious", "/disharmonious-all").permitAll() // Famous dishes
+                            .requestMatchers("/restaurant-recently", "/restaurant-detail").permitAll() // Restaurants
+                            .requestMatchers("/dish-restaurant-all", "/dish-restaurant-detail", "/dish-restaurant-detail-2").permitAll() // Dishes
+                            .requestMatchers("/dish-restaurant", "/restaurant-by-dish").permitAll() // Dish-Restaurant mapping
+                            .requestMatchers("/dishWithSameIngredients").permitAll() // Related dishes
+                            .requestMatchers("/dishReview", "/restaurantReview").permitAll() // Reviews (GET)
+                            .anyRequest().authenticated() // Các request khác cần auth (POST/PUT/DELETE)
                     )
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

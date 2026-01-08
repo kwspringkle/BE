@@ -22,5 +22,15 @@ public interface DishRestaurantRepository extends JpaRepository<DishRestaurant, 
            "LOWER(dr.restaurant.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<DishRestaurant> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
+    // Search dishes by name only
+    @Query("SELECT dr FROM DishRestaurant dr WHERE " +
+           "LOWER(dr.dish.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    List<DishRestaurant> searchDishesByName(@Param("keyword") String keyword);
+
+    // Search dishes by ingredients
+    @Query("SELECT dr FROM DishRestaurant dr WHERE " +
+           "LOWER(dr.dish.ingredients) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    List<DishRestaurant> searchDishesByIngredients(@Param("keyword") String keyword);
+
     Optional<DishRestaurant> findByDishIdAndRestaurantId(int dishId, int restaurantId);
 }

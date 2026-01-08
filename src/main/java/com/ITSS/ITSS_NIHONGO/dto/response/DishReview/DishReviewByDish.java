@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public class DishReviewByDish {
     public int dishReviewId;
     public String fullName;
+    public String national;
     public String dishesName;
     public String comment;
     public float rate;

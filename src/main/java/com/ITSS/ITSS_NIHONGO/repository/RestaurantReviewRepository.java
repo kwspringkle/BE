@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface RestaurantReviewRepository extends JpaRepository<RestaurantReview, Integer> {
     List<RestaurantReview> findByRestaurant_Id(int restaurantId);
+    List<RestaurantReview> findByRestaurant_IdOrderByCreatedAtDesc(int restaurantId);
     Page<RestaurantReview> findByRestaurant_Id(int restaurantId, Pageable pageable);
     RestaurantReview findFirstByRestaurant_IdOrderByCreatedAtDesc(int restaurantId);
 }

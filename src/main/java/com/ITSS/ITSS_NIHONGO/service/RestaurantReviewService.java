@@ -82,9 +82,9 @@ public class RestaurantReviewService implements IRestaurantReview {
 
     @Override
     public List<RestaurantReviewByRestaurant> getRestaurantReviewByRestaurant(int restaurantId) {
-        List<RestaurantReview> restaurantReviews = restaurantReviewRepository.findByRestaurant_Id(restaurantId);
+        List<RestaurantReview> restaurantReviews = restaurantReviewRepository.findByRestaurant_IdOrderByCreatedAtDesc(restaurantId);
         if (restaurantReviews.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         List<RestaurantReviewByRestaurant> restaurantReviewByRestaurants = new ArrayList<>();
         for (RestaurantReview restaurantReview : restaurantReviews) {
@@ -93,6 +93,7 @@ public class RestaurantReviewService implements IRestaurantReview {
             RestaurantReviewByRestaurant restaurantReviewByRestaurant = RestaurantReviewByRestaurant.builder()
                     .restaurantReviewId(restaurantReview.getId())
                     .fullName(users.getName())
+                    .national(users.getNational())
                     .restaurantName(restaurant.getName())
                     .comment(restaurantReview.getComment())
                     .avatar(users.getAvatar())

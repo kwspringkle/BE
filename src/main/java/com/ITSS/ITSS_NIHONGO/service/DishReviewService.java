@@ -73,9 +73,9 @@ public class DishReviewService implements IDishReviewServer {
 
     @Override
     public List<DishReviewByDish> getDishReviewByDish(int dishId) {
-        List<DishReview> dishReviews = dishReviewRepository.findByDish_Id(dishId);
+        List<DishReview> dishReviews = dishReviewRepository.findByDish_IdOrderByCreatedAtDesc(dishId);
         if (dishReviews.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         List<DishReviewByDish> dishReviewByDishes = new ArrayList<>();
         for (DishReview dishReview : dishReviews) {
@@ -84,6 +84,7 @@ public class DishReviewService implements IDishReviewServer {
             DishReviewByDish dishReviewByDish = DishReviewByDish.builder()
                     .dishReviewId(dishReview.getId())
                     .fullName(users.getName())
+                    .national(users.getNational())
                     .dishesName(dishes.getName())
                     .comment(dishReview.getComment())
                     .avatar(users.getAvatar())
